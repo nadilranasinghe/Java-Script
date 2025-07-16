@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<HTML>
+  <HEAD>
+    <!-- this example plays around with the <FORM> element as well as some accompanying JavaScript
+         which is tied to / associated with the "Submit" button.  Notice also how the "title" of the
+         page (i.e. the description in the tab of the browser) is being changed each time the Submit
+         button is pressed.  Unlike the first example, the form in this example actually submits the
+         form content to a "response" page for further processing. -->
+    <TITLE>My 1st Form</TITLE>
+    <SCRIPT type="text/javascript">
+    // ---------------------------------------------------------------------------------------
+    // NAME:    validateForm
+    // PURPOSE: This function is called on the client-side to ensure that the necessary ("mandatory")
+    //          fields have all been completed before submitting.
+    // ---------------------------------------------------------------------------------------
+    function validateForm()
+    {
+        var whichColour = "NONE";
+        var shouldSubmit = true;    // let's assume that I will submit
+
+        // do a little pre-processing of the form data - checking which radio button has been selected for colour
+        if (document.FirstForm.colour[0].checked == true) { whichColour = "RED"; }
+        if (document.FirstForm.colour[1].checked == true) { whichColour = "YELLOW"; }
+        if (document.FirstForm.colour[2].checked == true) { whichColour = "PINK"; }
+        if (document.FirstForm.colour[3].checked == true) { whichColour = "GREEN"; }
+        if (document.FirstForm.colour[4].checked == true) { whichColour = "ORANGE"; }
+        if (document.FirstForm.colour[5].checked == true) { whichColour = "PURPLE"; }
+        if (document.FirstForm.colour[6].checked == true) { whichColour = "BLUE"; }
+
+        // first let's do some user input level validation ... according to my form, all input fields are mandatory
+        // first let's do some user input level validation ... according to my form, all input fields are mandatory
+        if ((document.getElementById("userFirst").value == "") || (document.getElementById("userLast").value == "") || (document.getElementById("userAge").value == "0") || (whichColour == "NONE"))
+        {
+		var errMsg;
+		// tell the user which fields are not complete
+            errMsg = "Sorry ... All fields in the form are <b>MANDATORY</b>.  You are currently missing the <ul>";
+            if (document.getElementById("userFirst").value == "") errMsg=errMsg+"<li>the <i>First Name</i></li>";
+            if (document.getElementById("userLast").value == "") errMsg=errMsg+"<li>the <i>Last Name</i></li>";
+            if (document.getElementById("userAge").value == "0") errMsg=errMsg+"<li>the <i>Age Range</i></li>";
+            if (whichColour == "NONE") errMsg=errMsg+"<li>the <i>Favourite Colour</i></li>";
+            errMsg=errMsg+"</ul>";		// close the unordered list element
+
+            document.getElementById("userFeedback").innerHTML = errMsg;
+            shouldSubmit = false;   // sorry there's an error - can't submit
+        }
+        return shouldSubmit;
+    }
+      </script>
+  </HEAD>
+  <BODY>
+    <!-- 
+        NOTICE:  Here I specify the ACTION element to get this form to submit it's contents to another webpage...
+                 I've specified the ACTION, but not the METHOD!  Do I need to specify the METHOD?!?!
+
+        I'm also using the "onSubmit" behaviour of submitting the form as well ...
+     -->
+    <FORM name="FirstForm" action="S-02-Form-to-Submit-to.html" onsubmit="return validateForm();">
+      <H3>Sample Form</H3>
+      <P>
+        This is my first form, and I would like to use it to learn about different inputs
+        and also accessing the elements of my form through the DOM.<br/>Once I can gain access
+        to the elements, then maybe I can begin to use them in JavaScript functions ...
+      </P>
+
+      <!-- 
+           I like my form elements to line up and be orderly ... call me weird ... that's why I'm using a borderless table ...
+           In this form, I will ask the person's first and last name, their age range and
+           favourite colour ...
+      -->
+      <P>Please complete the following information and when done, press the <B><I>Submit</I></B> button.</P>
+      <TABLE border="0" width="80%">
+        <TR>
+          <TD width="20%" align="right">First Name ?</TD>
+          <TD width="2%">&nbsp;</TD>
+          <TD width="58%" align="left"><INPUT type="text" size="15" placeholder="Joe" name="firstName" id="userFirst" /></TD>
+        </TR>
+        <TR>
+          <TD align="right">Last Name ?</TD>
+          <TD></TD>
+          <TD align="left"><INPUT type="text" size="15" placeholder="Student" name="lastName" id="userLast" /></TD>
+        </TR>
+        <TR>
+          <TD align="right">Your Age ?</TD>
+          <TD></TD>
+          <TD align="left">
+            <SELECT name="ageRange" id="userAge">
+              <OPTION value="0">--Select Age Range--</OPTION>
+              <OPTION value="1"> 1 to 10 years</OPTION>
+              <OPTION value="2">11 to 20 years</OPTION>
+              <OPTION value="3">21 to 30 years</OPTION>
+              <OPTION value="4">31 to 40 years</OPTION>
+              <OPTION value="5">41 to 50 years</OPTION>
+              <OPTION value="6">51 to 60 years</OPTION>
+            </SELECT>
+          </TD>
+        </TR>
+        <TR>
+          <TD align="right">Favourite Colour ?</TD>
+          <TD></TD>
+          <TD align="left">
+            <INPUT type="radio" name="colour" value="red"/>red&nbsp;
+            <INPUT type="radio" name="colour" value="yellow"/>yellow&nbsp;
+            <INPUT type="radio" name="colour" value="pink"/>pink&nbsp;
+            <INPUT type="radio" name="colour" value="green"/>green&nbsp;
+            <INPUT type="radio" name="colour" value="orange"/>orange&nbsp;
+            <INPUT type="radio" name="colour" value="purple"/>purple&nbsp;
+            <INPUT type="radio" name="colour" value="blue"/>blue
+          </TD>
+        </TR>
+        <TR>
+          <TD></TD>
+          <TD></TD>
+          <!-- 
+            Notice that the following button has a special "type" - known as the "submit" type ...
+               ... when an input's type is "submit" - the browser looks to the <FORM> element for
+                   its ACTION and METHOD values and knows what to do -- sending it to the server 
+
+               ... also notice that against best coding practices, I have decided to do no INPUT-LEVEL or
+                   formatting validation on the client-side before submitting to the server.
+           -->
+          <TD align="left"><INPUT type="submit" id="goForIt" value="Submit"/>
+        </TR>
+      </table>
+
+      <br/>
+      <div id="userFeedback" style="color:red;"></div>
+    </FORM>
+  </BODY>
+</HTML>
