@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 13</title>
+    <style>
+       body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+
+    .form-row {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-row label {
+      width: 180px;
+      font-weight: bold;
+    }
+
+    .form-row input[type="text"] {
+      width: 200px;
+    }
+
+    .form-row select {
+      width: 210px;
+    }
+
+    .form-row .error {
+      margin-left: 15px;
+      color: red;
+      font-size: 0.9em;
+    }
+
+    #formContainer {
+      max-width: 600px;
+    }
+
+    #confirmation {
+      display: none;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    </style>
+
+    
+</head>
+<body>
+    <h1>Questionaire</h1>
+
+    <div id="formContainer">
+        <form id="orderForm">
+            
+            <!--Fullname-->
+            <div class="form-row">
+                <label for="fullName">Full Name*: </label>
+                <input type="text" id="fullName" maxlength="25" size="20" placeholder="Name?" required>    
+            <TD align="left">
+            <span id="nameError" style="color: red;"></span>
+          </TD>
+            </div>
+
+            <!--DOB-->
+            <div class="form-row">
+                <label for="postalCode">Postal Code*: </label>
+                <input type="text" id="postalCode" maxlength="10" size="20" placeholder="ANANAN" required>    
+                <TD align="left">
+                    <span id="postalCodeErr" style="color: red;"></span>
+                </TD>
+            </div>
+
+            <!-- Part Dropdown -->
+            <div class="form-row">
+                <label for="residence">Select Residence*:</label>
+                <select id="residence">
+                <option value="0">--Choose Dwelling--</option>
+                <option value="Detached House">HOUSE</option>
+                <option value="Apartment">APARTMENT</option>
+                <option value="Townhouse">TOWNHOUSE</option>
+                <option value="Condominium">CONDOMINIUM</option>
+                </select>
+                <TD align="left">
+                    <span id="residenceErr" style="color: red;"></span>
+                </TD>
+            </div>
+
+            <!-- Extended Warranty -->
+            <div class="form-row">
+                <label>Do you own or rent the Dwelling*:</label>
+                <input type="radio" name="dwelling" value="Own"> Own
+                <input type="radio" name="dwelling" value="Rent"> Rent
+                <TD align="left">
+                    <span id="dwellingErr" style="color: red;"></span>
+                </TD>
+            </div>
+
+            <!-- Submit Button -->
+        <div class="form-row">
+            <label></label>
+            <button type="button" onclick="validatePage()">Submit Information</button>
+        </div>
+        
+        </form>
+
+
+    </div>
+
+
+    <script src="validatePage.js"></script>
+</body>
+<!DOCTYPE html>
