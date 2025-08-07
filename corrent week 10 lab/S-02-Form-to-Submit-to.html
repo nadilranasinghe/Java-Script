@@ -1,0 +1,80 @@
+<HTML>
+  <HEAD>
+    <TITLE>Destination Web-Page</TITLE>
+    <SCRIPT type="text/javascript">
+
+      // This function borrowed from : http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values
+      function getParameterByName(name)
+      {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+        results = regex.exec(location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
+
+      function ParseInput()
+      {
+        // we know that the other form had elements called firstName, lastName, ageRange and colour that
+        // we care about - so let's peel/parse them out of the QUERYSTRING that was directed at this page
+        var fn = getParameterByName("firstName");
+        var ln = getParameterByName("lastName");
+        var ar = getParameterByName("ageRange");
+        var co = getParameterByName("colour");
+
+        // now we'll use the DOM to draw a table of the previous form's element values
+        //  In my code below
+        //   - I am using a <DIV> to control the table as a whole and center it on the webpage
+        //   - notice when creating a table, I really only need to specify the dimension (e.g. widths) of the columns in the initial row of the table
+        document.write("<div align='center'>");
+        document.write("  <table border='0' cellpadding='0' cellspacing='0'>");
+        document.write("    <tr><td align='right' width='100'>firstName</td><td align='center' width = '50'>=</td><td align='left' width='250'>"+fn+"</td></tr>");
+        document.write("    <tr><td align='right'>lastName</td><td align='center'>=</td><td align='left'>" + ln + "</td></tr>");
+        document.write("    <tr><td align='right'>ageRange</td><td align='center'>=</td><td align='left'>" + ar + "</td></tr>");
+        document.write("    <tr><td align='right'>colour</td><td align='center'>=</td><td align='left'>" + co + "</td></tr>");
+        document.write("  </table>");
+        document.write("</div>");
+    }
+    </SCRIPT>
+  </HEAD>
+
+  <!-- To examine the behaviour of the "onload" event try the following "body" definition -->
+<!-- <BODY onload="ParseInput();"> -->
+<BODY>
+    <FORM name="SampleForm">
+      <H3>The Submission Form</H3>
+
+      <P>
+         In the URL below, you can see how the first web-page passes the form's element
+         values onto this web-page.  Since I used the (default) form method of <b><i>GET</i></b>,
+         the values are actually passed in plain text in the URL !! (You can see it above)
+      </P>
+
+      <!-- I'm going to embed a JavaScript here to dump out the URL and QueryString -->
+      <TABLE border="1" cellpadding="1" cellspacing="0">
+        <TR>
+          <td align="right">URL :</td>
+          <td>
+            <script type="text/javascript">
+              document.write(window.location);
+            </script>
+          </td>
+        </TR>
+        <TR>
+          <td align="right">Querystring :</td>
+          <td>
+            <script type="text/javascript">
+              document.write(window.location.search);
+            </script>
+          </td>
+        </TR>
+      </TABLE>
+      <BR />
+      <P>
+        Now let's call the ParseInput() function (borrowed from StackOverflow) to see the individual key-value pairs in the QueryString...
+      </P>
+        <script type="text/javascript">
+            ParseInput();
+        </script>
+    </FORM>
+  </BODY>
+</HTML>

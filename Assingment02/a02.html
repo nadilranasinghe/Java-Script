@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PROG1275 - A02: Hi-Low Game</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: aliceblue;
+           
+        }
+
+        .game-container{
+            max-width: 600;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+        }
+
+        .input-selection{
+            margin: 20px 0;
+        }
+
+        input{
+            padding: 8px;
+            margin: 10px 0;
+            width: 200px;
+        }
+
+
+
+        button{
+            padding: 8px 15px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover{
+            background-color: aqua;
+        }
+
+        .error{
+            color: red;
+            margin: 10px 0;
+
+        }
+
+        .hidden{
+            display: none;
+        }
+
+        #winMessage{
+            font-size: 24px;
+            font-weight: bold;
+            color: blueviolet;
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <h1> Hi-Low Game</h1>
+    <div id="game-container">
+        <div class="input-selection">
+            <label for="playerName">Please Enter your Name: </label><br>
+            <input type="text" id="playerName" required>
+            <button id="submitName">Start Game</button>
+        </div>
+        <div id="nameError" class="error hidden"></div>
+        
+        <div id="maxNumberSelection" class="hidden">
+            <h1> Hi, <span id="displayName"></span></h1>
+            <div class="input-selection">
+                <label for="maxNumber"> Enter the Maximum Number for game: </label><br>
+                <input type="number" id="maxNumber" min="2" required>
+                <button id="submitGuess">Submit</button>
+            </div>
+            <div id="maxNumberError" class="error hidden"></div>
+        </div>
+        
+        
+        <div id="gameSelection" class="hidden">
+            <h1> Hi, <span id="displayingGameName"></span>!</h1>
+            <div class="message" id="rangeMessage"></div>
+            <div class="input-selection">
+                <label for="guess">Enter your guess: </label><br>
+                <input type="number" id="guess" required>
+                <button id="submitGuess">Make this guess</button>
+            </div>
+            <div id="guessError" class="error hidden"></div>
+            <div id="message" id="feedbackMessage"></div>
+        </div>
+        
+        <div id="winSelection" class="hidden">
+            <div id="winMessage">YOU WIN!!!</div>
+            <button id="playAgain">Play Again</button>
+        </div>
+    </div>
+
+</body>
+<script>
+    let playerName = "";
+    let maxNumber = 0;
+    let randomNumber = 0;
+    let minRange = 1;
+    let maxRange = 0;
+
+    const nameSection = document.getElementById("nameSection");
+    const maxNumberSelection = documnet.getElementById("maxNumberSelection");
+    const gameSelection = document.getElementById("gameSection");
+    const winSelection = document.getElementById("winSelection");
+
+    const playerNameInput = document.getElementById("playerName");
+    const nameError = document.getElementById("nameError");
+    const displayName = document.getElementById("displayName");
+    const displayingGameName = document.getElementById("displayingGameName");
+
+    const guessInput = document.getElementById("guess");
+    const guessError = document.getElementById("guessError");
+    const rangeMessage = document.getElementById("rangeMessage");
+    const feedbackMessage = document.getElementById("feedbackMessage");
+
+    document.querySelector("submitName").addEventListener("click", validateName);
+    document.querySelector("submitMaxNumber").addEventListener("click", validateMaxNumber);
+    document.querySelector("submitGuess").addEventListener("click", validateGuess);
+    document.querySelector("playAgain").addEventListener("click", resetGame);
+
+    function validateName() {
+        const name = playerNameInput.value.trim();
+        if (name === ""){
+            nameError.textContent = "Name cannot be blank";
+            nameError.classList.remove("hidden");
+            return;
+
+        } 
+
+        playerName = name;
+        displayName.textContent = name;
+        displayingGameName.textContent = name;
+
+        nameSection.classList.add("hidden");
+        nameError.classList.add("hidden");
+        maxNumberSelection.classList.remove("hidden");
+    }
+
+    function validateMaxNumber(){
+        const max = parseInt(maxNumberInput.value)
+
+        if(isNaN(max) || max < 2){
+            maxNumberError.textContent = "Please enter a value greater than 1";
+            maxNumberError.classList.remove("hidden");
+            return;
+        }
+        maxNumber = max;
+        maxRange = max;
+        randomNumber = generateRandomNumber(1, max);
+
+        maxNumberSelection.classList.add("hidden");
+        maxNumberError.classList.add("hidden");
+        gameSelection.classList.remove("hidden");
+
+        updateRangeMessage();
+    }
+
+    function generateRandomNumber(min,max){
+        return Math.floor(Math.random() * (max-min + 1)) + min;
+    }
+
+    function updateRangeMessage() {
+        rangeMessage.textContent = `Your guessing range is any value between ${minRange} to ${maxRange}`;
+    }
+
+    function validateGuess() {
+        const guess = parseInt(guessInput.value);
+
+        if(isNaN(guess)){
+            guessError.textContent = "Enter a valid Number";
+            guessError.classList.remove("hidden");
+            updateRangeMessage();
+            return;
+        }
+        if (guess < minRange || guess > maxRange){
+            guessError.textContent = `Your guess is outside of the range ${minRange} to ${maxRange}`;
+            guessError.classList.remove("hidden");
+            updateRangeMessage();
+            return;
+        }
+        guessError.classList.add("hidden");
+        checkGuess(guess);
+    }
+
+    function checkGuess(guess) {
+        if (guess == randomNumber){
+            gameSelection.classList.add("hidden");
+            document.body.style.backgroundColor = "#d4edda";
+            winSelection.classList.remove("hidden");
+            return;
+        }
+
+    
+
+    if (guess < randomNumber){
+        minRange = guess + 1;
+        feedbackMessage.textContent = "Your guess is too low";
+    }else{
+        maxRange = guess - 1;
+        feedbackMessage.textContent = "Your guess is too high";
+    }
+
+    updateRangeMessage();
+    guessInput.value = "";
+}
+
+function resetGame() {
+    document.body.style.background = "blue";
+    winSelection.classList.add("hidden");
+    maxNumberSelection.classList.remove("hidden");
+
+    minRange = 1;
+    maxRange = 0;
+    randomNumber = 0;
+    maxNumberInput.value = "";
+    guessInput.value = "";
+    feedbackMessage.textContent = "";
+}
+
+</script>
+</html>
+
+
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+

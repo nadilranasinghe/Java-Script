@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 11</title>
+    <style>
+       body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+
+    .form-row {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-row label {
+      width: 180px;
+      font-weight: bold;
+    }
+
+    .form-row input[type="text"] {
+      width: 200px;
+    }
+
+    .form-row select {
+      width: 210px;
+    }
+
+    .form-row .error {
+      margin-left: 15px;
+      color: red;
+      font-size: 0.9em;
+    }
+
+    #formContainer {
+      max-width: 600px;
+    }
+
+    #confirmation {
+      display: none;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    </style>
+
+    <script src="formValidate.js"></script>
+</head>
+<body>
+    <h1>Place your Order</h1>
+
+    <div id="formContainer">
+        <form id=orderForm"">
+            
+            <!--Fullname-->
+            <div class="form-row">
+                <label for="fullName">Full Name*: </label>
+                <input type="text" id="fullName" maxlength="20">    
+                <span class="error" id="nameError"></span>
+            </div>
+
+            <!--DOB-->
+            <div class="form-row">
+                <label for="dob">Date of Birth (YYYY-MM-DD)*: </label>
+                <input type="text" id="dob" maxlength="11">    
+                <span class="error" id="dobError"></span>
+            </div>
+
+            <!-- Part Dropdown -->
+            <div class="form-row">
+                <label for="partNumber">Part Number*:</label>
+                <select id="partNumber">
+                <option value="0">--MUST SELECT--</option>
+                <option value="55D-26">Gribbly Gibbit</option>
+                <option value="X55-87">Fizzly Bing Bang</option>
+                <option value="BMB77-88">Bumblee Dumble</option>
+                <option value="WBF77-8">Wizbang Goozzle</option>
+                </select>
+                <span class="error" id="partError"></span>
+            </div>
+
+            <!-- Extended Warranty -->
+            <div class="form-row">
+                <label>Extended Warranty*:</label>
+                <input type="radio" name="warranty" value="Yes"> Yes
+                <input type="radio" name="warranty" value="No"> No
+                <span class="error" id="warrantyError"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-row">
+                <label></label>
+                <button type="button" onclick="validatePage()">Place Order</button>
+            </div>
+
+            <div id="confirmation">
+                <h2>Order Submitted!</h2>
+                <div id="orderDetails"></div>
+            </div>
+
+        </form>
+
+
+    </div>
+</body>
+</html>
