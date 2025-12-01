@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="eng>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Online Text Editor </title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<header>	
+				<h1>Online Test Editor</h1>
+				<p class="subtitle>A jQuery and JSON based text editing Solution</p>
+		</header>
+
+		<div class="editor-container">
+			<div class="controls">
+				<div class="file-selector">
+					<label for="fileList">Select File: </label>
+					<select id="fileList">
+						<option value="">---Choose a file ---</option>
+					</select>
+					<button id=refreshFiles" title="Refresh File List"></button>
+				</div>
+				<div class="file-actions">
+					<input type="text" id="newFileName" placeholder="New file name">
+					<button id="saveFile" class="btn-primary">Save File</button>
+					<button id="saveAs" class="btn-secondary">Save As New File</button>
+				</div>
+
+			</div>
+			<div class="status-message" id="statusMessage"></div>
+			<div class="editing-area">
+				<textarea id="textEditor" placeholder="Select a file to start editing"></textarea>
+			</div>
+			<div class=file-info>
+				<span id="currentFile">No file selected</span>
+				<span id="charCount">Characters: 0</span>
+			</div>
+		</div>
+	</div>
+	<script src="js/script.js"></script>
+</body>
+</html>
