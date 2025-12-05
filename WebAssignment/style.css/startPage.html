@@ -41,6 +41,171 @@
 			</div>
 		</div>
 	</div>
-	<script src="js/script.js"></script>
+	<script>
+		$(document).ready(function() {
+			let currentFileName = '';
+
+			//loading the file list on the page
+			loadFileList();
+
+			$('#refreshFiles').click(function(){
+				loadFileList();
+			});
+
+			//File selection change
+			$('#fileList').change(function() {
+				const selectedFile = $(this).val();
+				if(selectedFile){
+					loadFileContent(selectedFile)
+				}
+				else{
+					clearEditor();
+				}
+			});
+
+			//Save file button
+			$('#saveFile').click(function(){
+				if(currentFileName){
+					saveFile(currentFileName);
+				}else{
+					showMessage('Please select a file first', 'error');
+				}
+			});
+
+
+			$('#saveAs').click(function(){
+				const newFileName = $('#newFileName').val().trim();
+				if(newFileName){
+					saveFile(newFileName, true);
+				}else{
+					showMessage('Please enter a file name for "Save As"', 'error');
+				}
+
+			});
+
+			//character count
+			$('#textEditor').on('input',function(){
+				const charCount = $(this).val().length;
+				$('#charCount').text('Characters: '+charCount);
+			});
+
+			//File Loading Function
+			function loadFileList(){
+				showMessage('Loading File List', 'info');
+
+				$.ajax({
+					url: 'api/getFiles.php',
+					type: 'GET',
+					dataType: 'json',
+					success: function(response){
+						if(response.success){
+							populateFileList(response.files);
+							showMessage('File list loaded successfully','success');
+						}else{
+							showMessage('Error loading file list' + response.message, 'error');
+						}
+					},
+					error:function(xhr, status, error){
+						showMessage('Error loading file list' + error, 'error');
+					}
+				});
+			}
+
+			function populateFileList(files){
+				const fileList = $('#fileList');
+				fileList.empty();
+				fileList.append('<option value="">-- Choose a file --</option>');
+				files.forEach(function(file){
+					fileList.append('<option value="' + file + '">' + file + '</option');
+				});
+			}
+
+			function loadFileContent(fileName){
+				showMessage('Loading file: '+ fileName, 'info');
+				$.ajax({
+					url: 'api/getFileContent.php',
+					type: 'POST',
+					data: JSON.stringify({filename: fileName}),
+					contentType: 'application/json',
+					dataType: 'json',
+					success: function(response){
+						if(response.success){
+							$('#textEditor').val(response.content);
+							currentFileName = fileName;
+							$('#currentFile').text('Current file: ' + fileName);
+							$('#charCount').text('Characters: ' + response.content.length);
+							showMessage('File loaded successfully', 'success');
+
+						}else{
+							showMessage('Error loading file: '+ response.message, 'error');
+							clearEditor();
+						}
+
+						
+					}
+	
+				});
+			}
+			function saveFile(filename, isNewFile = false){
+				const content = $('#textEditor').val();
+				showMessage('Saving file', 'info');
+
+				$.ajax({
+					url: 'api/saveFile.php',
+					type: 'POST',
+					data: JSON.stringify({
+						filename: fileName,
+						content: content,
+						isNewFile: isNewFile
+					}),
+					contentType: 'application/json',
+					dataType: 'json',
+					success: function(response){
+						if(response.success){
+							showMessage('File saved successfully: ' + fileName, 'success');
+							if(isNewFile){
+								currentFileName = fileName;
+								$('#currentFileName').text('Current file: ' + fileName);
+								$('#newFileName').val('';
+									loadFileList();
+								
+							}
+
+						}else{
+							showMessage('Error Saving File: ' + response.message, 'error');
+
+						}
+					},
+					error: function(xhr, status, error){
+						showMessage('Error saving file: '+ error, 'error');
+					}
+				});
+			}
+
+			function clearEditor(){
+				$('#textEditor').val('');
+				currentFileName = '';
+				$('#currentFile').text('No file selected');
+				$('#charCount').text('Characters: 0');
+			}
+
+			function showMessage(message, type = 'info'){
+				const statusMessage = $('$statusMessage');
+				statusMessage.removeClass('success error').addClass(type);
+				statusMessage.text(message).fadeIn();
+
+				setTimeout(function(){
+					statusMessage.fadeOut();
+				}, 5000);
+			}
+
+
+
+		
+		}
+
+
+
+	</script>
 </body>
 </html>
